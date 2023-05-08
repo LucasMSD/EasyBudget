@@ -14,7 +14,7 @@ namespace EasyBudget.Data.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         [Required]
         public FinancialType Type { get; set; }
         public long CategoryId { get; set; }

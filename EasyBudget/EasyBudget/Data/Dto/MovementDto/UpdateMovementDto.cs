@@ -13,8 +13,9 @@ namespace EasyBudget.Data.Dto.MovementDto
         [Required(AllowEmptyStrings = false)]
         public string Title { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         [Required]
+        [EnumDataType(typeof(FinancialType))]
         public FinancialType Type { get; set; }
         [Required]
         public long CategoryId { get; set; }

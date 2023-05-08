@@ -38,6 +38,12 @@ namespace EasyBudget.Repositories.Implementations
         public virtual async Task DeleteAsync(long id)
         {
             var entity = await FindByIdAsync(id);
+
+            if (entity == null)
+            {
+                return;
+            }
+
             _context.Set<TEntity>().Remove(entity);
             _context.SaveChanges();
         }
