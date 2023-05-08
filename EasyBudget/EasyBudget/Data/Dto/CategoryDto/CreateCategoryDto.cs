@@ -1,9 +1,9 @@
 ﻿using EasyBudget.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace EasyBudget.Data.Dto.Category
+namespace EasyBudget.Data.Dto.CategoryDto
 {
-    public class CreateCategoryDto
+    public class CreateCategoryDto : IBaseDto
     {
         [MaxLength(50)]
         [Required(AllowEmptyStrings = false)]

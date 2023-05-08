@@ -1,4 +1,4 @@
-﻿using EasyBudget.Data.Dto.Category;
+﻿using EasyBudget.Data.Dto.CategoryDto;
 using EasyBudget.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 

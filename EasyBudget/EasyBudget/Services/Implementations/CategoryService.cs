@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EasyBudget.Data.Dto.Category;
+using EasyBudget.Data.Dto.CategoryDto;
 using EasyBudget.Data.Models;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.IServices;

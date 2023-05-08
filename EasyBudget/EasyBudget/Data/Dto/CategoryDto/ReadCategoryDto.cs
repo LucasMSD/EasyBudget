@@ -1,8 +1,8 @@
 ﻿using EasyBudget.Enums;
 
-namespace EasyBudget.Data.Dto.Category
+namespace EasyBudget.Data.Dto.CategoryDto
 {
-    public class ReadCategoryDto
+    public class ReadCategoryDto : IBaseDto
     {
         public long Id { get; set; }
         public string Name { get; set; }
