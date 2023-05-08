@@ -52,90 +52,90 @@ namespace EasyBudget.Migrations
                         new
                         {
                             Id = 1L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2480),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1582),
                             Name = "Transport",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2494)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1594)
                         },
                         new
                         {
                             Id = 2L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2495),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1595),
                             Name = "Food",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2496)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1595)
                         },
                         new
                         {
                             Id = 3L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2496),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1596),
                             Name = "Groceries",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2497)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1596)
                         },
                         new
                         {
                             Id = 4L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2497),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1597),
                             Name = "Health",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2498)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1597)
                         },
                         new
                         {
                             Id = 5L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2498),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1598),
                             Name = "Work",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2499)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1598)
                         },
                         new
                         {
                             Id = 6L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2499),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1623),
                             Name = "Home",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2500)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1624)
                         },
                         new
                         {
                             Id = 7L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2500),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1624),
                             Name = "Investments",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2501)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1625)
                         },
                         new
                         {
                             Id = 8L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2501),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1625),
                             Name = "Others expenses",
                             Type = 2,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2502)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1626)
                         },
                         new
                         {
                             Id = 9L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2502),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1626),
                             Name = "Salary",
                             Type = 1,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2503)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1627)
                         },
                         new
                         {
                             Id = 10L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2503),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1627),
                             Name = "Investments",
                             Type = 1,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2504)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1628)
                         },
                         new
                         {
                             Id = 11L,
-                            Created = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2505),
+                            Created = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1628),
                             Name = "Other incomes",
                             Type = 1,
-                            Updated = new DateTime(2023, 5, 8, 1, 12, 25, 122, DateTimeKind.Local).AddTicks(2505)
+                            Updated = new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1629)
                         });
                 });
 
@@ -153,8 +153,11 @@ namespace EasyBudget.Migrations
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("Date");
 
                     b.Property<string>("Description")
                         .HasMaxLength(200)
@@ -167,6 +170,9 @@ namespace EasyBudget.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

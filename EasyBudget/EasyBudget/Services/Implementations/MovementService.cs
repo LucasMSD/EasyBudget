@@ -47,7 +47,7 @@ namespace EasyBudget.Services.Implementations
                 return Result.Fail("The movement must be greater then zero.");
             }
 
-            if (createMovementDto.Date > DateOnly.FromDateTime(DateTime.Now))
+            if (createMovementDto.Date.Date > DateTime.Now.Date)
             {
                 return Result.Fail("The movement date cannot be greater than the current date.");
             }
@@ -97,7 +97,7 @@ namespace EasyBudget.Services.Implementations
                 return Result.Fail("The movement must be greater then zero.");
             }
 
-            if (updatedMovementDto.Date > DateOnly.FromDateTime(DateTime.Now))
+            if (updatedMovementDto.Date.Date > DateTime.Now.Date)
             {
                 return Result.Fail("The movement date cannot be greater than the current date.");
             }

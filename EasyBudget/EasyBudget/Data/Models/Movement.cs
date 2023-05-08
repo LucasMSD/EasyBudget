@@ -1,5 +1,6 @@
 ﻿using EasyBudget.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EasyBudget.Data.Models
 {
@@ -14,7 +15,8 @@ namespace EasyBudget.Data.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public DateOnly Date { get; set; }
+        [Column(TypeName = "Date")]
+        public DateTime Date { get; set; }
         [Required]
         public FinancialType Type { get; set; }
         public long CategoryId { get; set; }
