@@ -15,7 +15,7 @@ namespace EasyBudget
 
             // Add services to the container.
             builder.Services.AddDbContext<AppDbContext>(
-                options => options.UseSqlServer(builder.Configuration.GetConnectionString("EasyBudgetDb")));
+                options => options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("EasyBudgetDb")));
 
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
