@@ -23,11 +23,16 @@ namespace EasyBudget.Services.Implementations
 
         public async Task<Result<ReadCategoryDto>> GetByIdAsync(long id)
         {
+            if (id <= 0)
+            {
+                return Result.Fail("The field Id has to be greater than zero.");
+            }
+
             var category = await _categoryRepository.FindByIdAsync(id);
 
             if (category == null)
             {
-                return Result.Fail("Category does not exist");
+                return Result.Fail("Category does not exist.");
             }
 
             return Result.Ok(_mapper.Map<ReadCategoryDto>(category));
@@ -81,11 +86,6 @@ namespace EasyBudget.Services.Implementations
             if (id <= 0)
             {
                 return Result.Fail("The field Id has to be greater than zero.");
-            }
-
-            if (!await _categoryRepository.ExistsByIdAsync(id))
-            {
-                return Result.Fail("The Id provided does not exist.");
             }
 
             await _categoryRepository.DeleteAsync(id);
