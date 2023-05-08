@@ -56,11 +56,6 @@ namespace EasyBudget.Services.Implementations
 
         public async Task<Result> UpdateAsync(UpdateCategoryDto updateCategoryDto)
         {
-            if (updateCategoryDto.Id <= 0)
-            {
-                return Result.Fail("The field Id has to be greater than zero.");
-            }
-
             if (await _categoryRepository.ExistsByNameAndTypeAsync(updateCategoryDto.Name, updateCategoryDto.Type))
             {
                 return Result.Fail("A category with this name and this type already exists.");

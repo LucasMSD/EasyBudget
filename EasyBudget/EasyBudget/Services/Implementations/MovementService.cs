@@ -42,21 +42,6 @@ namespace EasyBudget.Services.Implementations
 
         public async Task<Result<ReadMovementDto>> CreateAsync(CreateMovementDto createMovementDto)
         {
-            if (createMovementDto.Amount <= 0)
-            {
-                return Result.Fail("The movement must be greater then zero.");
-            }
-
-            if (createMovementDto.Date.Date > DateTime.Now.Date)
-            {
-                return Result.Fail("The movement date cannot be greater than the current date.");
-            }
-
-            if (createMovementDto.CategoryId <= 0)
-            {
-                return Result.Fail("CategoryId field must be greater than zero.");
-            }
-
             var category = await _categoryRepository.FindByIdAsync(createMovementDto.CategoryId);
 
             if (category == null)
@@ -80,31 +65,11 @@ namespace EasyBudget.Services.Implementations
 
         public async Task<Result> UpdateAsync(UpdateMovementDto updatedMovementDto)
         {
-            if (updatedMovementDto.Id <= 0)
-            {
-                return Result.Fail("The field Id has to be greater than zero.");
-            }
-
             var movement = await _movementRepository.FindByIdAsync(updatedMovementDto.Id);
 
             if (movement == null)
             {
                 return Result.Fail("The Id provided does not exist.");
-            }
-
-            if (updatedMovementDto.Amount <= 0)
-            {
-                return Result.Fail("The movement must be greater then zero.");
-            }
-
-            if (updatedMovementDto.Date.Date > DateTime.Now.Date)
-            {
-                return Result.Fail("The movement date cannot be greater than the current date.");
-            }
-
-            if (updatedMovementDto.CategoryId <= 0)
-            {
-                return Result.Fail("CategoryId field must be greater than zero.");
             }
 
             var category = await _categoryRepository.FindByIdAsync(updatedMovementDto.CategoryId);
