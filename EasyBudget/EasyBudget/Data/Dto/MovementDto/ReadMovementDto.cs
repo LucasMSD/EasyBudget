@@ -10,6 +10,7 @@ namespace EasyBudget.Data.Dto.MovementDto
         public string Title { get; set; }
         public DateOnly Date { get; set; }
         public FinancialType Type { get; set; }
+        public string TypeName { get; set; }
         public ReadCategoryDto Category { get; set; }
         public string Description { get; set; }
     }

@@ -9,7 +9,8 @@ namespace EasyBudget.Mapper.Profiles
         public CategoryProfile()
         {
             CreateMap<CreateCategoryDto, Category>();
-            CreateMap<Category, ReadCategoryDto>();
+            CreateMap<Category, ReadCategoryDto>()
+                .ForMember(readCategoryDto => readCategoryDto.TypeName, options => options.MapFrom(category => category.Type.ToString()));
             CreateMap<UpdateCategoryDto, Category>();
         }
     }

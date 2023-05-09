@@ -11,7 +11,8 @@ namespace EasyBudget.Mapper.Profiles
             CreateMap<CreateMovementDto, Movement>();
             CreateMap<Movement, ReadMovementDto>()
                 .ForMember(readMovementDto => readMovementDto.Category, option => option.MapFrom(movement => movement.Category))
-                .ForMember(readMovementDto => readMovementDto.Date, option => option.MapFrom(movement => DateOnly.FromDateTime(movement.Date)));
+                .ForMember(readMovementDto => readMovementDto.Date, option => option.MapFrom(movement => DateOnly.FromDateTime(movement.Date)))
+                .ForMember(readMovementDto => readMovementDto.TypeName, option => option.MapFrom(movement => movement.Type.ToString()));
             CreateMap<UpdateMovementDto, Movement>();
         }
     }
