@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EasyBudget.Data.Dto.MovementDto;
 using EasyBudget.Data.Models;
+using EasyBudget.Errors;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.IServices;
 using FluentResults;
@@ -27,14 +28,14 @@ namespace EasyBudget.Services.Implementations
         {
             if (id <= 0)
             {
-                return Result.Fail("The field Id has to be greater than zero.");
+                return Result.Fail(new IdLessThanZeroError());
             }
 
             var movement = await _movementRepository.FindByIdAsync(id);
 
             if (movement == null)
             {
-                return Result.Fail("Movement does not exist.");
+                return Result.Fail(new MovementNotFoundError());
             }
 
             return Result.Ok(_mapper.Map<ReadMovementDto>(movement));
@@ -49,12 +50,12 @@ namespace EasyBudget.Services.Implementations
 
             if (category == null)
             {
-                return Result.Fail("The chosen category does not exist.");
+                return Result.Fail(new CategoryNotFoundError());
             }
 
             if (!createMovementDto.Type.Equals(category.Type))
             {
-                return Result.Fail("The chosen category has a different type (Income or Expense) from the movement type");
+                return Result.Fail(new InvalidCategoryError());
             }
 
             var movement = _mapper.Map<Movement>(createMovementDto);
@@ -72,19 +73,19 @@ namespace EasyBudget.Services.Implementations
 
             if (movement == null)
             {
-                return Result.Fail("The Id provided does not exist.");
+                return Result.Fail(new MovementNotFoundError());
             }
 
             var category = await _categoryRepository.FindByIdAsync(updatedMovementDto.CategoryId);
 
             if (category == null)
             {
-                return Result.Fail("The chosen category does not exist.");
+                return Result.Fail(new CategoryNotFoundError());
             }
 
             if (!updatedMovementDto.Type.Equals(category.Type))
             {
-                return Result.Fail("The chosen category has a different type (Income or Expense) from the movement type");
+                return Result.Fail(new InvalidCategoryError());
             }
 
             _mapper.Map(updatedMovementDto, movement);
@@ -99,7 +100,7 @@ namespace EasyBudget.Services.Implementations
         {
             if (id <= 0)
             {
-                return Result.Fail("The field Id has to be greater than zero.");
+                return Result.Fail(new IdLessThanZeroError());
             }
 
             await _movementRepository.DeleteAsync(id);

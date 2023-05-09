@@ -19,7 +19,7 @@ namespace EasyBudget.Repositories.Implementations
 
         public async Task<decimal> SumAllMovementsAmount()
         {
-            return await _context.Movements.SumAsync(x => x.Type.Equals(FinancialType.Income) ? x.Amount : (x.Amount * -1));
+            return Decimal.Round(await _context.Movements.SumAsync(x => x.Type.Equals(FinancialType.Income) ? x.Amount : (x.Amount * -1)), 2);
         }
     }
 }

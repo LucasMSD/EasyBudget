@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EasyBudget.Data.Dto.CategoryDto;
 using EasyBudget.Data.Models;
+using EasyBudget.Errors;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.IServices;
 using FluentResults;
@@ -27,14 +28,14 @@ namespace EasyBudget.Services.Implementations
         {
             if (id <= 0)
             {
-                return Result.Fail("The field Id has to be greater than zero.");
+                return Result.Fail(new IdLessThanZeroError());
             }
 
             var category = await _categoryRepository.FindByIdAsync(id);
 
             if (category == null)
             {
-                return Result.Fail("Category does not exist.");
+                return Result.Fail(new CategoryNotFoundError());
             }
 
             return Result.Ok(_mapper.Map<ReadCategoryDto>(category));
@@ -44,7 +45,7 @@ namespace EasyBudget.Services.Implementations
         {
             if (await _categoryRepository.ExistsByNameAndTypeAsync(createCategoryDto.Name, createCategoryDto.Type))
             {
-                return Result.Fail("A category with this name and this type already exists.");
+                return Result.Fail(new CategoryAlreadyExistsError());
             }
 
             var category = _mapper.Map<Category>(createCategoryDto);
@@ -60,14 +61,14 @@ namespace EasyBudget.Services.Implementations
         {
             if (await _categoryRepository.ExistsByNameAndTypeAsync(updateCategoryDto.Name, updateCategoryDto.Type))
             {
-                return Result.Fail("A category with this name and this type already exists.");
+                return Result.Fail(new CategoryAlreadyExistsError());
             }
 
             var category = await _categoryRepository.FindByIdAsync(updateCategoryDto.Id);
 
             if (category == null)
             {
-                return Result.Fail("The Id provided does not exist.");
+                return Result.Fail(new CategoryNotFoundError());
             }
 
             _mapper.Map(updateCategoryDto, category);
@@ -84,14 +85,14 @@ namespace EasyBudget.Services.Implementations
 
             if (deleteCategory == null)
             {
-                return Result.Fail("The category you want to delete does not exist.");
+                return Result.Fail(new CategoryNotFoundError());
             }
 
             var replaceCategory = await _categoryRepository.FindByIdAsync(deleteCategoryDto.ReplaceCategoryId);
 
             if (replaceCategory == null)
             {
-                return Result.Fail("The replacement category does not exist.");
+                return Result.Fail(new CategoryNotFoundError().WithMetadata("Field", nameof(deleteCategoryDto.ReplaceCategoryId)));
             }
 
             var movements = await _movementRepository.FindAllByCategoryAsync(deleteCategoryid);

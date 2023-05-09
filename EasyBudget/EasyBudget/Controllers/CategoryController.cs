@@ -1,4 +1,5 @@
 ﻿using EasyBudget.Data.Dto.CategoryDto;
+using EasyBudget.Errors;
 using EasyBudget.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,11 +21,6 @@ namespace EasyBudget.Controllers
         {
             var result = await _categoryService.GetAllAsync();
 
-            if (result.IsFailed)
-            {
-                return NoContent();
-            }
-
             return Ok(result.Value);
         }
 
@@ -33,9 +29,9 @@ namespace EasyBudget.Controllers
         {
             var result = await _categoryService.GetByIdAsync(id);
 
-            if (result.IsFailed)
+            if (result.HasError<IBadRequestError>())
             {
-                return NoContent();
+                return BadRequest(result.Errors.Select(x => new { x.Message, x.Metadata }));
             }
 
             return Ok(result.Value);
@@ -46,9 +42,9 @@ namespace EasyBudget.Controllers
         {
             var result = await _categoryService.CreateAsync(createCategoryDto);
 
-            if (result.IsFailed)
+            if (result.HasError<IBadRequestError>())
             {
-                return BadRequest(result.Errors.FirstOrDefault()?.Message);
+                return BadRequest(result.Errors.Select(x => new { x.Message, x.Metadata }));
             }
 
             return CreatedAtAction(nameof(Get), new { result.Value.Id }, result.Value);
@@ -59,12 +55,12 @@ namespace EasyBudget.Controllers
         {
             var result = await _categoryService.UpdateAsync(updateCategoryDto);
 
-            if (result.IsFailed)
+            if (result.HasError<IBadRequestError>())
             {
-                return BadRequest(result.Errors.FirstOrDefault()?.Message);
+                return BadRequest(result.Errors.Select(x => new { x.Message, x.Metadata }));
             }
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -72,12 +68,12 @@ namespace EasyBudget.Controllers
         {
             var result = await _categoryService.DeleteAsync(id, deleteCategoryDto);
 
-            if (result.IsFailed)
+            if (result.HasError<IBadRequestError>())
             {
-                return BadRequest(result.Errors.FirstOrDefault()?.Message);
+                return BadRequest(result.Errors.Select(x => new { x.Message, x.Metadata }));
             }
 
-            return Ok();
+            return NoContent();
         }
     }
 }

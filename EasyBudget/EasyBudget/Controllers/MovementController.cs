@@ -1,4 +1,6 @@
 ﻿using EasyBudget.Data.Dto.MovementDto;
+using EasyBudget.Errors;
+using EasyBudget.Services.Implementations;
 using EasyBudget.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,11 +22,6 @@ namespace EasyBudget.Controllers
         {
             var result = await _movementService.GetAllAsync();
 
-            if (result.IsFailed)
-            {
-                return NoContent();
-            }
-
             return Ok(result.Value);
         }
 
@@ -32,10 +29,10 @@ namespace EasyBudget.Controllers
         public async Task<IActionResult> Get([FromRoute] long id)
         {
             var result = await _movementService.GetByIdAsync(id);
-            
-            if (result.IsFailed)
+
+            if (result.HasError<IBadRequestError>())
             {
-                return BadRequest(result.Errors.FirstOrDefault()?.Message);
+                return BadRequest(result.Errors.Select(x => new { x.Message, x.Metadata }));
             }
 
             return Ok(result.Value);
@@ -43,25 +40,16 @@ namespace EasyBudget.Controllers
 
         [HttpGet("balance")]
         public async Task<IActionResult> GetBalance()
-        {
-            var result = await _movementService.GetBalanceAsync();
-
-            if (result.IsFailed)
-            {
-                NoContent();
-            }
-
-            return Ok(result.Value);
-        }
+            => Ok((await _movementService.GetBalanceAsync()).Value);
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateMovementDto createMovementDto)
         {
             var result = await _movementService.CreateAsync(createMovementDto);
 
-            if (result.IsFailed)
+            if (result.HasError<IBadRequestError>())
             {
-                return BadRequest(result.Errors.FirstOrDefault()?.Message);
+                return BadRequest(result.Errors.Select(x => new { x.Message, x.Metadata }));
             }
 
             return CreatedAtAction(nameof(Get), new { result.Value.Id }, result.Value);
@@ -72,12 +60,12 @@ namespace EasyBudget.Controllers
         {
             var result = await _movementService.UpdateAsync(updateMovementDto);
 
-            if (result.IsFailed)
+            if (result.HasError<IBadRequestError>())
             {
-                return BadRequest(result.Errors.FirstOrDefault()?.Message);
+                return BadRequest(result.Errors.Select(x => new { x.Message, x.Metadata }));
             }
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

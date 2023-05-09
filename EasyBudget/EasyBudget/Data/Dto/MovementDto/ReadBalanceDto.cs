@@ -1,4 +1,6 @@
-﻿namespace EasyBudget.Data.Dto.MovementDto
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace EasyBudget.Data.Dto.MovementDto
 {
     public class ReadBalanceDto
     {
