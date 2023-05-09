@@ -2,7 +2,7 @@
 
 namespace EasyBudget.Errors
 {
-    public class MovementNotFoundError : Error, IBadRequestError
+    public class MovementNotFoundError : Error, INotFoundError
     {
         public MovementNotFoundError() : base("Movement does not exist.") { }
     }
