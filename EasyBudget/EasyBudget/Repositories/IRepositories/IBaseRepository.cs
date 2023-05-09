@@ -6,6 +6,7 @@
         Task<TEntity?> FindByIdAsync(long id);
         Task CreateAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
+        Task UpdateRangeAsync(IEnumerable<TEntity> entities);
         Task DeleteAsync(long id);
     }
 }

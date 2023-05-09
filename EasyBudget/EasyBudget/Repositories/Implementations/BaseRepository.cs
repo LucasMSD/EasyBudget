@@ -35,6 +35,12 @@ namespace EasyBudget.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+        public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
+        {
+            _context.Set<TEntity>().UpdateRange(entities);
+            await _context.SaveChangesAsync();
+        }
+
         public virtual async Task DeleteAsync(long id)
         {
             var entity = await FindByIdAsync(id);

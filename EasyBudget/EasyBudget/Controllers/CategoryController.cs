@@ -68,9 +68,9 @@ namespace EasyBudget.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] long id)
+        public async Task<IActionResult> Delete([FromRoute] long id, [FromBody] ReplaceCategoryDto deleteCategoryDto)
         {
-            var result = await _categoryService.DeleteAsync(id);
+            var result = await _categoryService.DeleteAsync(id, deleteCategoryDto);
 
             if (result.IsFailed)
             {

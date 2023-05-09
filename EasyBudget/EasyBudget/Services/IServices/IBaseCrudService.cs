@@ -1,5 +1,4 @@
-﻿using EasyBudget.Data.Dto;
-using FluentResults;
+﻿using FluentResults;
 
 namespace EasyBudget.Services.IServices
 {

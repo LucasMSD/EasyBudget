@@ -10,12 +10,14 @@ namespace EasyBudget.Services.Implementations
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMovementRepository _movementRepository;
         private readonly IMapper _mapper;
 
-        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoryService(ICategoryRepository categoryRepository, IMovementRepository movementRepository,IMapper mapper)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _movementRepository = movementRepository;
         }
 
         public async Task<Result<List<ReadCategoryDto>>> GetAllAsync()
@@ -76,16 +78,38 @@ namespace EasyBudget.Services.Implementations
             return Result.Ok();
         }
 
-        public async Task<Result> DeleteAsync(long id)
+        public async Task<Result> DeleteAsync(long deleteCategoryid, ReplaceCategoryDto deleteCategoryDto)
         {
-            if (id <= 0)
+            var deleteCategory = await _categoryRepository.FindByIdAsync(deleteCategoryid);
+
+            if (deleteCategory == null)
             {
-                return Result.Fail("The field Id has to be greater than zero.");
+                return Result.Fail("The category you want to delete does not exist.");
             }
 
-            await _categoryRepository.DeleteAsync(id);
+            var replaceCategory = await _categoryRepository.FindByIdAsync(deleteCategoryDto.ReplaceCategoryId);
+
+            if (replaceCategory == null)
+            {
+                return Result.Fail("The replacement category does not exist.");
+            }
+
+            var movements = await _movementRepository.FindAllByCategoryAsync(deleteCategoryid);
+
+            if (movements.Any())
+            {
+                movements.ForEach(x => x.CategoryId = deleteCategoryDto.ReplaceCategoryId);
+            }
+
+            await _movementRepository.UpdateRangeAsync(movements);
+            await _categoryRepository.DeleteAsync(deleteCategoryid);
 
             return Result.Ok();
+        }
+
+        public Task<Result> DeleteAsync(long id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
