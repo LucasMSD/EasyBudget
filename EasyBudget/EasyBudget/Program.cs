@@ -1,7 +1,5 @@
 using EasyBudget.Config;
 using EasyBudget.Data;
-using EasyBudget.Data.Dto.CategoryDto;
-using EasyBudget.Data.Dto.Validators;
 using EasyBudget.Repositories.Implementations;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.Implementations;
