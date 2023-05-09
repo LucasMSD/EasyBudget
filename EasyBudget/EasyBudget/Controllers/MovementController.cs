@@ -41,6 +41,19 @@ namespace EasyBudget.Controllers
             return Ok(result.Value);
         }
 
+        [HttpGet("balance")]
+        public async Task<IActionResult> GetBalance()
+        {
+            var result = await _movementService.GetBalanceAsync();
+
+            if (result.IsFailed)
+            {
+                NoContent();
+            }
+
+            return Ok(result.Value);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateMovementDto createMovementDto)
         {

@@ -40,6 +40,9 @@ namespace EasyBudget.Services.Implementations
             return Result.Ok(_mapper.Map<ReadMovementDto>(movement));
         }
 
+        public async Task<Result<ReadBalanceDto>> GetBalanceAsync()
+            => Result.Ok(new ReadBalanceDto() { Balance = await _movementRepository.SumAllMovementsAmount() });
+
         public async Task<Result<ReadMovementDto>> CreateAsync(CreateMovementDto createMovementDto)
         {
             var category = await _categoryRepository.FindByIdAsync(createMovementDto.CategoryId);
