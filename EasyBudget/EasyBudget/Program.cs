@@ -9,6 +9,8 @@ using EasyBudget.Services.IServices;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
 namespace EasyBudget
@@ -36,10 +38,19 @@ namespace EasyBudget
 
             builder.Services.AddSwaggerGen(config =>
             {
+                config.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "EasyBudget API",
+                    Description = "An ASP.NET Core Web API for  m   anage personal finances",
+                });
+                config.ExampleFilters();
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 config.IncludeXmlComments(xmlPath);
             });
+
+            builder.Services.AddSwaggerExamplesFromAssemblyOf<IAssemblyMarker>();
 
             var app = builder.Build();
 

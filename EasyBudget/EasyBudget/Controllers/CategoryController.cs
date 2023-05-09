@@ -19,7 +19,8 @@ namespace EasyBudget.Controllers
         /// <summary>
         /// Gets all categories in the system
         /// </summary>
-        /// <returns code="200">Returns all categories in the system</returns>
+        /// <response code="200">Returns all categories in the system</response>
+        [ProducesResponseType(typeof(List<ReadCategoryDto>), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -31,9 +32,10 @@ namespace EasyBudget.Controllers
         /// <summary>
         /// Gets a category with the specified id
         /// </summary>
-        /// <returns code="200">Return the category with the specified id</returns>
-        /// <returns code="400">The specified id is invalid</returns>
-        /// <returns code="404">Category not found</returns>
+        /// <response code="200">Return the category with the specified id</response>
+        /// <response code="400">The specified id is invalid</response>
+        /// <response code="404">Category not found</response>
+        [ProducesResponseType(typeof(ReadCategoryDto), StatusCodes.Status200OK)]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] long id)
         {
@@ -56,8 +58,9 @@ namespace EasyBudget.Controllers
         /// <summary>
         /// Create a new category
         /// </summary>
-        /// <returns code="201">Category created successfully</returns>
-        /// <returns code="400">Unable to create the category due to validaton error</returns>
+        /// <response code="201">Category created successfully</response>
+        /// <response code="400">Unable to create the category due to validaton error</response>
+        [ProducesResponseType(typeof(ReadCategoryDto), StatusCodes.Status201Created)]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateCategoryDto createCategoryDto)
         {
@@ -75,9 +78,10 @@ namespace EasyBudget.Controllers
         /// <summary>
         /// Update an existing category
         /// </summary>
-        /// <returns code="204">Category updated successfully</returns>
-        /// <returns code="400">Unable to update the category due to validaton error</returns>
-        /// <returns code="404">Category not found</returns>
+        /// <response code="204">Category updated successfully</response>
+        /// <response code="400">Unable to update the category due to validaton error</response>
+        /// <response code="404">Category not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UpdateCategoryDto updateCategoryDto)
         {
@@ -99,9 +103,10 @@ namespace EasyBudget.Controllers
         /// <summary>
         /// Delete an existing category and replace all movements that has that category to a new category
         /// </summary>
-        /// <returns code="204">Category deleted successfully</returns>
-        /// <returns code="400">Unable to delete the category due to validaton error</returns>
-        /// <returns code="404">Category not found</returns>
+        /// <response code="204">Category deleted successfully</response>
+        /// <response code="400">Unable to delete the category due to validaton error</response>
+        /// <response code="404">Category not found</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] long id, [FromBody] ReplaceCategoryDto deleteCategoryDto)
         {
