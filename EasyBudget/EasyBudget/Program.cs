@@ -40,7 +40,7 @@ namespace EasyBudget
                 {
                     Version = "v1",
                     Title = "EasyBudget API",
-                    Description = "An ASP.NET Core Web API for  m   anage personal finances",
+                    Description = "An ASP.NET Core Web API for manage personal finances",
                 });
                 config.ExampleFilters();
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

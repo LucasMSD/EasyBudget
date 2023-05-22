@@ -60,17 +60,17 @@ namespace EasyBudget.Migrations
                 columns: new[] { "Id", "Created", "Name", "Type", "Updated" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1582), "Transport", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1594) },
-                    { 2L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1595), "Food", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1595) },
-                    { 3L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1596), "Groceries", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1596) },
-                    { 4L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1597), "Health", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1597) },
-                    { 5L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1598), "Work", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1598) },
-                    { 6L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1623), "Home", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1624) },
-                    { 7L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1624), "Investments", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1625) },
-                    { 8L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1625), "Others expenses", 2, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1626) },
-                    { 9L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1626), "Salary", 1, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1627) },
-                    { 10L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1627), "Investments", 1, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1628) },
-                    { 11L, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1628), "Other incomes", 1, new DateTime(2023, 5, 8, 14, 21, 23, 860, DateTimeKind.Local).AddTicks(1629) }
+                    { 1L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(369), "Transport", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(379) },
+                    { 2L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(380), "Food", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(381) },
+                    { 3L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(381), "Groceries", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(382) },
+                    { 4L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(382), "Health", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(383) },
+                    { 5L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(411), "Work", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(412) },
+                    { 6L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(412), "Home", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(413) },
+                    { 7L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(413), "Investments", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(414) },
+                    { 8L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(414), "Others expenses", 2, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(414) },
+                    { 9L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(415), "Salary", 1, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(415) },
+                    { 10L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(416), "Investments", 1, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(416) },
+                    { 11L, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(417), "Other incomes", 1, new DateTime(2023, 5, 9, 13, 59, 1, 695, DateTimeKind.Local).AddTicks(417) }
                 });
 
             migrationBuilder.CreateIndex(
