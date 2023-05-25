@@ -1,14 +1,13 @@
 using EasyBudget.Config;
-using EasyBudget.Data;
 using EasyBudget.Repositories.Implementations;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.Implementations;
 using EasyBudget.Services.IServices;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Data.SqlClient;
 using System.Reflection;
 
 namespace EasyBudget
@@ -20,9 +19,8 @@ namespace EasyBudget
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddDbContext<AppDbContext>(
-                options => options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("EasyBudgetDb")));
 
+            builder.Services.AddTransient(_ => new SqlConnection(builder.Configuration.GetConnectionString("EasyBudgetDb")));
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IMovementRepository, MovementRepository>();

@@ -21,8 +21,8 @@ namespace EasyBudget.Services.Implementations
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<List<ReadMovementDto>>> GetAllAsync()
-            => Result.Ok(_mapper.Map<List<ReadMovementDto>>(await _movementRepository.FindAllAsync()));
+        public async Task<Result<IEnumerable<ReadMovementDto>>> GetAllAsync()
+            => Result.Ok(_mapper.Map<IEnumerable<ReadMovementDto>>(await _movementRepository.FindAllAsync()));
 
         public async Task<Result<ReadMovementDto>> GetByIdAsync(long id)
         {
@@ -62,9 +62,9 @@ namespace EasyBudget.Services.Implementations
             movement.Created = DateTime.Now;
             movement.Updated = DateTime.Now;
 
-            await _movementRepository.CreateAsync(movement);
+            var createdMovement = await _movementRepository.InsertAsync(movement);
 
-            return Result.Ok(_mapper.Map<ReadMovementDto>(movement));
+            return Result.Ok(_mapper.Map<ReadMovementDto>(createdMovement));
         }
 
         public async Task<Result> UpdateAsync(UpdateMovementDto updatedMovementDto)

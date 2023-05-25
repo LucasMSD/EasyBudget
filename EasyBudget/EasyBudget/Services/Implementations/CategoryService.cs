@@ -5,6 +5,7 @@ using EasyBudget.Errors;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.IServices;
 using FluentResults;
+using System.Collections;
 
 namespace EasyBudget.Services.Implementations
 {
@@ -21,8 +22,8 @@ namespace EasyBudget.Services.Implementations
             _movementRepository = movementRepository;
         }
 
-        public async Task<Result<List<ReadCategoryDto>>> GetAllAsync()
-            => Result.Ok(_mapper.Map<List<ReadCategoryDto>>(await _categoryRepository.FindAllAsync()));
+        public async Task<Result<IEnumerable<ReadCategoryDto>>> GetAllAsync()
+            => Result.Ok(_mapper.Map<IEnumerable<ReadCategoryDto>>(await _categoryRepository.FindAllAsync()));
 
         public async Task<Result<ReadCategoryDto>> GetByIdAsync(long id)
         {
@@ -52,9 +53,9 @@ namespace EasyBudget.Services.Implementations
             category.Created = DateTime.Now;
             category.Updated = DateTime.Now;
 
-            await _categoryRepository.CreateAsync(category);
+            var insertedCategory = await _categoryRepository.InsertAsync(category);
 
-            return Result.Ok(_mapper.Map<ReadCategoryDto>(category));
+            return Result.Ok(_mapper.Map<ReadCategoryDto>(insertedCategory));
         }
 
         public async Task<Result> UpdateAsync(UpdateCategoryDto updateCategoryDto)
@@ -99,7 +100,10 @@ namespace EasyBudget.Services.Implementations
 
             if (movements.Any())
             {
-                movements.ForEach(x => x.CategoryId = deleteCategoryDto.ReplaceCategoryId);
+                foreach (var movement in movements)
+                {
+                    movement.CategoryId = deleteCategoryDto.ReplaceCategoryId;
+                }
             }
 
             await _movementRepository.UpdateRangeAsync(movements);

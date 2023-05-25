@@ -1,31 +1,28 @@
 ﻿using EasyBudget.Enums;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EasyBudget.Data.Models
 {
+    [Table("Movement")]
     public class Movement
     {
-        [Key]
-        [Required]
+        [Column("id")]
         public long Id { get; set; }
-        [Required]
+        [Column("amount")]
         public decimal Amount { get; set; }
-        [MaxLength(50)]
-        [Required]
+        [Column("title")]
         public string Title { get; set; }
-        [Required]
-        [Column(TypeName = "Date")]
+        [Column("date")]
         public DateTime Date { get; set; }
-        [Required]
+        [Column("Type")]
         public FinancialType Type { get; set; }
+        [Column("category_id")]
         public long CategoryId { get; set; }
-        public virtual Category Category { get; set; }
-        [MaxLength(200)]
+        [Column("description")]
         public string? Description { get; set; }
-        [Required]
+        [Column("created")]
         public DateTime Created { get; set; }
-        [Required]
+        [Column("updated")]
         public DateTime Updated { get; set; }
     }
 }

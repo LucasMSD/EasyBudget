@@ -1,24 +1,20 @@
 ﻿using EasyBudget.Enums;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EasyBudget.Data.Models
 {
+    [Table("Category")]
     public class Category
     {
-        [Key]
-        [Required]
+        [Column("id")]
         public long Id { get; set; }
-        [MaxLength(50)]
-        [Required]
+        [Column("name")]
         public string Name { get; set; }
-        [Required]
+        [Column("type")]
         public FinancialType Type { get; set; }
-        [JsonIgnore]
-        public virtual List<Movement> Movements { get; set; }
-        [Required]
+        [Column("created")]
         public DateTime Created { get; set; }
-        [Required]
+        [Column("updated")]
         public DateTime Updated { get; set; }
     }
 }
