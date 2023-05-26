@@ -13,7 +13,7 @@ namespace EasyBudget.Documentations.SwaggerExamples
                 Id = 3,
                 Amount = 20.1m,
                 Title = "A carton of 12 eggs",
-                Date = DateOnly.FromDateTime(new DateTime(2023, 5, 7)),
+                Date = new DateTime(2023, 5, 7),
                 Category = new Data.Dto.CategoryDto.ReadCategoryDto()
                 {
                     Id = 3,
@@ -37,7 +37,7 @@ namespace EasyBudget.Documentations.SwaggerExamples
                     Id = 3,
                     Amount = 20.1m,
                     Title = "A carton of 12 eggs",
-                    Date = DateOnly.FromDateTime(new DateTime(2023, 5, 7)),
+                    Date = new DateTime(2023, 5, 7),
                     Category = new Data.Dto.CategoryDto.ReadCategoryDto()
                     {
                         Id = 3,
@@ -52,7 +52,7 @@ namespace EasyBudget.Documentations.SwaggerExamples
                     Id = 4,
                     Amount = 100.5m,
                     Title = "Dinner with Leyse",
-                    Date = DateOnly.FromDateTime(new DateTime(2023, 5, 8)),
+                    Date = new DateTime(2023, 5, 8),
                     Category = new Data.Dto.CategoryDto.ReadCategoryDto()
                     {
                         Id = 3,

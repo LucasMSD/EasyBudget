@@ -2,9 +2,9 @@
 
 namespace EasyBudget.Data.Dto.CategoryDto
 {
-    public class ReadCategoryDto : IBaseDto
+    public class ReadCategoryDto
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public FinancialType Type { get; set; }
         public string TypeName { get; set; }

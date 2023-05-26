@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using EasyBudget.Data.Models;
+using EasyBudget.Data.Dto.CategoryDto;
+using EasyBudget.Data.Dto.MovementDto;
 using EasyBudget.Enums;
 using EasyBudget.Repositories.IRepositories;
-using Microsoft.VisualBasic;
 using System.Data.SqlClient;
 
 namespace EasyBudget.Repositories.Implementations
@@ -16,114 +16,234 @@ namespace EasyBudget.Repositories.Implementations
             _conn = conn;
         }
 
-        public async Task DeleteAsync(long id)
+        public async Task DeleteAsync(int id)
         {
             string command = @"
 DELETE FROM Movement
-WHERE id = @id
+WHERE id = @Id
 ";
 
-            await _conn.ExecuteAsync(command, new { id });
+            await _conn.ExecuteAsync(command, new { Id = id });
         }
 
-        public async Task<IEnumerable<Movement>> FindAllAsync()
+        public async Task<IEnumerable<ReadMovementDto>> FindAllAsync()
         {
-            string query = @"
+            string query = @$"
 SELECT
-    *
-FROM Movement;";
+    [m].id as Id,
+    [m].amount as Amount,
+    [m].title as Title,
+    [m].date as Date,
+    [m].type as Type,
+    CASE
+        WHEN [m].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName,
+    [m].description as Description,
+    [c].id as Id,
+    [c].name as Name,
+    [c].type as Type,
+    CASE
+        WHEN [c].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName
+FROM Movement as [m]
+    JOIN Category as [c]
+        on [m].category_id = [c].id;";
 
-            return await _conn.QueryAsync<Movement>(query);
+            return await _conn.QueryAsync<ReadMovementDto, ReadCategoryDto, ReadMovementDto>(query, (movement, category) =>
+            {
+                movement.Category = category;
+                return movement;
+            });
         }
 
-        public async Task<IEnumerable<Movement>> FindAllByCategoryAsync(long categoryId)
+        public async Task<IEnumerable<ReadMovementDto>> FindAllByCategoryAsync(int categoryId)
         {
-            string query = @"
+            string query = @$"
 SELECT
-    *
-FROM Movement
-WHERE category_id = @category_id;";
+    [m].id as Id,
+    [m].amount as Amount,
+    [m].title as Title,
+    [m].date as Date,
+    [m].type as Type,
+    CASE
+        WHEN [m].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName,
+    [m].description as Description,
+    [c].id as Id,
+    [c].name as Name,
+    [c].type as Type,
+    CASE
+        WHEN [c].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName
+FROM Movement as [m]
+    JOIN Category as [c]
+        on [m].category_id = [c].id
+WHERE [m].category_id = @CategoryId;";
 
-            return await _conn.QueryAsync<Movement>(query, new { category_id = categoryId });
+            return await _conn.QueryAsync<ReadMovementDto, ReadCategoryDto, ReadMovementDto>(query, (movement, category) =>
+            {
+                movement.Category = category;
+                return movement;
+            }, new { CategoryId = categoryId });
         }
 
-        public async Task<Movement?> FindByIdAsync(long id)
+        public async Task<ReadMovementDto?> FindByIdAsync(int id)
         {
-            string query = @"
+            string query = @$"
 SELECT
-    *
-FROM Movement
-WHERE id = @id;";
+    [m].id as Id,
+    [m].amount as Amount,
+    [m].title as Title,
+    [m].date as Date,
+    [m].type as Type,
+    CASE
+        WHEN [m].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName,
+    [m].description as Description,
+    [c].id as Id,
+    [c].name as Name,
+    [c].type as Type,
+    CASE
+        WHEN [c].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName
+FROM Movement as [m]
+    JOIN Category as [c]
+        on [m].category_id = [c].id
+WHERE [m].id = @Id;";
 
-            return await _conn.QueryFirstOrDefaultAsync<Movement?>(query, new { id });
+            return (await _conn.QueryAsync<ReadMovementDto, ReadCategoryDto, ReadMovementDto?>(query, (movement, category) =>
+            {
+                movement.Category = category;
+                return movement;
+            }, new { Id = id })).FirstOrDefault();
         }
 
-        public async Task<Movement> InsertAsync(Movement movement)
+        public async Task<ReadMovementDto> InsertAsync(CreateMovementDto movement)
         {
-            string insert = @"
+            string insert = @$"
 INSERT INTO Movement
-(amount, title, date, type, category_id, description)
-OUTPUT INSERTED.* VALUES
-@amount, @title, @date, @type, @category_id, @description;
+(amount, title, date, type, category_id, description) VALUES
+(@Amount, @Title, @Date, @Type, @CategoryId, @Description);
+
+SELECT
+    [m].id as Id,
+    [m].amount as Amount,
+    [m].title as Title,
+    [m].date as Date,
+    [m].type as Type,
+    CASE
+        WHEN [m].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName,
+    [m].description as Description,
+    [c].id as Id,
+    [c].name as Name,
+    [c].type as Type,
+    CASE
+        WHEN [c].type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName
+FROM Movement as [m]
+    JOIN Category as [c]
+        on [m].category_id = [c].id
+WHERE [m].id = SCOPE_IDENTITY();
 ";
 
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@amount", movement.Amount);
-            parameters.Add("@title", movement.Title);
-            parameters.Add("@date", movement.Date);
-            parameters.Add("@type", movement.Type);
-            parameters.Add("@category_id", movement.CategoryId);
-            parameters.Add("@description", movement.Description);
-
-            return await _conn.QuerySingleAsync<Movement>(insert, parameters);
+            return (await _conn.QueryAsync<ReadMovementDto, ReadCategoryDto, ReadMovementDto>(insert, map: (movement, category) =>
+            {
+                movement.Category = category;
+                return movement;
+            }, param: movement)).First();
         }
 
         public async Task<decimal> SumAllMovementsAmount()
         {
             string query = $@"
 SELECT
-    COUNT(
+    SUM(
         CASE
-            WHEN type = @type
+            WHEN type = {(int)FinancialType.Expense}
                 THEN amount * (-1)
             ELSE amount
+        END
     )
 FROM Movement;
 ";
-            return decimal.Round(await _conn.QueryFirstAsync<decimal>(query, new { type = FinancialType.Expense }), 2);
+            return decimal.Round(await _conn.QueryFirstAsync<decimal>(query), 2);
         }
 
-        public async Task UpdateAsync(Movement movement)
+        public async Task UpdateAsync(UpdateMovementDto movement)
         {
             string update = @"
 UPDATE Movement
     SET
-        amount = @amount,
-        title = @title,
-        date = @date,
-        type = @type,
-        category_id = @category_id,
-        description = @description
-WHERE id = @id
+        amount = @Amount,
+        title = @Title,
+        date = @Date,
+        type = @Type,
+        category_id = @CategoryId,
+        description = @Description
+WHERE id = @Id
 ";
 
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@amount", movement.Amount);
-            parameters.Add("@title", movement.Title);
-            parameters.Add("@date", movement.Date);
-            parameters.Add("@type", movement.Type);
-            parameters.Add("@category_id", movement.CategoryId);
-            parameters.Add("@description", movement.Description);
-            parameters.Add("@id", movement.Id);
-
-            await _conn.ExecuteAsync(update, parameters);
+            await _conn.ExecuteAsync(update, movement);
         }
 
-        public Task UpdateRangeAsync(IEnumerable<Movement> movements)
+        public async Task UpdateRangeAsync(IEnumerable<UpdateMovementDto> movements)
         {
-            throw new NotImplementedException();
+            string update = @"
+UPDATE Movement
+    SET
+        amount = @Amount,
+        title = @Title,
+        date = @Date,
+        type = @Type,
+        category_id = @CategoryId,
+        description = @Description
+WHERE id = @Id
+";
+
+            await _conn.ExecuteAsync(update, movements);
+        }
+
+        public async Task ReplaceCategory(int oldCategoryId, int newCategoryId)
+        {
+            string update = @"
+UPDATE Movement
+    SET category_id = @NewCategoryId
+WHERE category_id = @OldCategoryId;
+";
+
+            await _conn.ExecuteAsync(update, new { NewCategoryId = newCategoryId, OldCategoryId = oldCategoryId });
+        }
+
+        public async Task<bool> ExistsByIdAsync(int id)
+        {
+            string query = @"
+SELECT
+    CASE
+        WHEN EXISTS(
+            SELECT 1 FROM Movement WHERE id = @Id)
+        THEN 1
+        ELSE 0
+    END;
+";
+
+            return Convert.ToBoolean(await _conn.ExecuteScalarAsync<int>(query, new { Id = id }));
         }
     }
 }

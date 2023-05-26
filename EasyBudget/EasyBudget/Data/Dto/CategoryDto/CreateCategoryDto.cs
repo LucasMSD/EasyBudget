@@ -2,7 +2,7 @@
 
 namespace EasyBudget.Data.Dto.CategoryDto
 {
-    public class CreateCategoryDto : IBaseDto
+    public class CreateCategoryDto
     {
         public string Name { get; set; }
         public FinancialType Type { get; set; }

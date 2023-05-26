@@ -1,16 +1,16 @@
-﻿using EasyBudget.Data.Models;
+﻿using EasyBudget.Data.Dto.CategoryDto;
 using EasyBudget.Enums;
 
 namespace EasyBudget.Repositories.IRepositories
 {
     public interface ICategoryRepository
     {
-        Task<bool> ExistsByIdAsync(long id);
+        Task<bool> ExistsByIdAsync(int id);
         Task<bool> ExistsByNameAndTypeAsync(string name, FinancialType type);
-        Task DeleteAsync(long id);
-        Task<IEnumerable<Category>> FindAllAsync();
-        Task<Category?> FindByIdAsync(long id);
-        Task<Category> InsertAsync(Category category);
-        Task UpdateAsync(Category category);
+        Task DeleteAsync(int id);
+        Task<IEnumerable<ReadCategoryDto>> FindAllAsync();
+        Task<ReadCategoryDto?> FindByIdAsync(int id);
+        Task<ReadCategoryDto> InsertAsync(CreateCategoryDto category);
+        Task UpdateAsync(UpdateCategoryDto category);
     }
 }

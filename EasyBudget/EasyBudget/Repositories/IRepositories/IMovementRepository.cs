@@ -1,16 +1,18 @@
-﻿using EasyBudget.Data.Models;
+﻿using EasyBudget.Data.Dto.MovementDto;
 
 namespace EasyBudget.Repositories.IRepositories
 {
     public interface IMovementRepository
     {
-        Task DeleteAsync(long id);
-        Task<IEnumerable<Movement>> FindAllAsync();
-        Task<IEnumerable<Movement>> FindAllByCategoryAsync(long categoryId);
-        Task<Movement?> FindByIdAsync(long id);
-        Task<Movement> InsertAsync(Movement movement);
+        Task DeleteAsync(int id);
+        Task<IEnumerable<ReadMovementDto>> FindAllAsync();
+        Task<IEnumerable<ReadMovementDto>> FindAllByCategoryAsync(int categoryId);
+        Task<ReadMovementDto?> FindByIdAsync(int id);
+        Task<ReadMovementDto> InsertAsync(CreateMovementDto movement);
         Task<decimal> SumAllMovementsAmount();
-        Task UpdateAsync(Movement movement);
-        Task UpdateRangeAsync(IEnumerable<Movement> movements);
+        Task UpdateAsync(UpdateMovementDto movement);
+        Task UpdateRangeAsync(IEnumerable<UpdateMovementDto> movements);
+        Task ReplaceCategory(int oldCategoryId, int newCategoryId);
+        Task<bool> ExistsByIdAsync(int id);
     }
 }

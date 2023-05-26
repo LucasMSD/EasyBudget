@@ -3,12 +3,12 @@ using EasyBudget.Enums;
 
 namespace EasyBudget.Data.Dto.MovementDto
 {
-    public class ReadMovementDto : IBaseDto
+    public class ReadMovementDto
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public decimal Amount { get; set; }
         public string Title { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public FinancialType Type { get; set; }
         public string TypeName { get; set; }
         public ReadCategoryDto Category { get; set; }

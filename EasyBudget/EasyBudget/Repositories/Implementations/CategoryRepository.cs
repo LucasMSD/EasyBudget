@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using EasyBudget.Data.Models;
+using EasyBudget.Data.Dto.CategoryDto;
 using EasyBudget.Enums;
 using EasyBudget.Repositories.IRepositories;
 using System.Data.SqlClient;
@@ -15,29 +15,29 @@ namespace EasyBudget.Repositories.Implementations
             _conn = conn;
         }
 
-        public async Task DeleteAsync(long id)
+        public async Task DeleteAsync(int id)
         {
             string command = @"
 DELETE FROM Category
-WHERE id = @id
+WHERE id = @Id
 ";
 
-            await _conn.ExecuteAsync(command, new { id });
+            await _conn.ExecuteAsync(command, new { Id = id });
         }
 
-        public async Task<bool> ExistsByIdAsync(long id)
+        public async Task<bool> ExistsByIdAsync(int id)
         {
             string command = @"
 SELECT
     CASE
         WHEN EXISTS(
-            SELECT * FROM Cliente WHERE id = @id)
+            SELECT 1 FROM Category WHERE id = @Id)
         THEN 1
         ELSE 0
     END;
 ";
 
-            return Convert.ToBoolean(await _conn.ExecuteScalarAsync<int>(command, new {id}));
+            return Convert.ToBoolean(await _conn.ExecuteScalarAsync<int>(command, new { Id = id }));
         }
 
         public async Task<bool> ExistsByNameAndTypeAsync(string name, FinancialType type)
@@ -46,70 +46,81 @@ SELECT
 SELECT
     CASE
         WHEN EXISTS(
-            SELECT * FROM Cliente WHERE name = @name and type = @type)
+            SELECT 1 FROM Category WHERE name = @Name and type = @Type)
         THEN 1
         ELSE 0
     END;
 ";
 
-            return Convert.ToBoolean(await _conn.ExecuteScalarAsync<int>(command, new { @name, @type }));
+            return Convert.ToBoolean(await _conn.ExecuteScalarAsync<int>(command, new { Name = name, Type = type }));
         }
 
-        public async Task<IEnumerable<Category>> FindAllAsync()
+        public async Task<IEnumerable<ReadCategoryDto>> FindAllAsync()
         {
-            string query = @"
+            string query = @$"
 SELECT
-    *
-FROM Category;";
+    id as Id,
+    name as Name,
+    type as Type,
+    CASE
+        WHEN type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName
+FROM Category";
 
-            return await _conn.QueryAsync<Category>(query);
+            return await _conn.QueryAsync<ReadCategoryDto>(query);
         }
 
-        public async Task<Category?> FindByIdAsync(long id)
+        public async Task<ReadCategoryDto?> FindByIdAsync(int id)
         {
-            string query = @"
+            string query = @$"
 SELECT
-    *
+    id as Id,
+    name as Name,
+    type as Type,
+    CASE
+        WHEN type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName
 FROM Category
-WHERE id = @id;";
+WHERE id = @Id;";
 
-            return await _conn.QueryFirstOrDefaultAsync<Category?>(query, new { id });
+            return await _conn.QueryFirstOrDefaultAsync<ReadCategoryDto?>(query, new { Id = id });
         }
 
-        public async Task<Category> InsertAsync(Category category)
+        public async Task<ReadCategoryDto> InsertAsync(CreateCategoryDto category)
         {
-            string insert = @"
+            string insert = @$"
 INSERT INTO Category
 (name, type)
-OUTPUT INSERTED.* VALUES
-@name, @type;
+OUTPUT
+    INSERTED.id as Id,
+    INSERTED.name as Name,
+    INSERTED.type as Type,
+    CASE
+        WHEN INSERTED.type = {(int)FinancialType.Income}
+            THEN '{FinancialType.Income}'
+        ELSE '{FinancialType.Expense}'
+    END as TypeName
+VALUES
+(@Name, @Type) ;
 ";
 
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@name", category.Name);
-            parameters.Add("@type", category.Type);
-
-            return await _conn.QuerySingleAsync<Category>(insert, parameters);
+            return await _conn.QuerySingleAsync<ReadCategoryDto>(insert, category);
         }
 
-        public async Task UpdateAsync(Category category)
+        public async Task UpdateAsync(UpdateCategoryDto category)
         {
             string update = @"
-UPDATE Movement
+UPDATE Category
     SET
-        name = @name,
-        type = @type,
-WHERE id = @id
+        name = @Name,
+        type = @Type
+WHERE id = @Id
 ";
-
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@name", category.Name);
-            parameters.Add("@type", category.Type);
-            parameters.Add("@id", category.Id);
-
-            await _conn.ExecuteAsync(update, parameters);
+            await _conn.ExecuteAsync(update, category);
         }
     }
 }

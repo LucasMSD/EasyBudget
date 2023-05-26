@@ -20,7 +20,7 @@ namespace EasyBudget.Controllers
         /// Gets all categories in the system
         /// </summary>
         /// <response code="200">Returns all categories in the system</response>
-        [ProducesResponseType(typeof(List<ReadCategoryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ReadCategoryDto>), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -37,7 +37,7 @@ namespace EasyBudget.Controllers
         /// <response code="404">Category not found</response>
         [ProducesResponseType(typeof(ReadCategoryDto), StatusCodes.Status200OK)]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] long id)
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
             var result = await _categoryService.GetByIdAsync(id);
 
@@ -94,7 +94,7 @@ namespace EasyBudget.Controllers
 
             if (result.HasError<INotFoundError>())
             {
-                return NotFound(result.Errors.OfType<IBadRequestError>().Select(x => new { x.Message, x.Metadata }));
+                return NotFound(result.Errors.OfType<INotFoundError>().Select(x => new { x.Message, x.Metadata }));
             }
 
             return NoContent();
@@ -108,7 +108,7 @@ namespace EasyBudget.Controllers
         /// <response code="404">Category not found</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] long id, [FromBody] ReplaceCategoryDto deleteCategoryDto)
+        public async Task<IActionResult> Delete([FromRoute] int id, [FromBody] ReplaceCategoryDto deleteCategoryDto)
         {
             var result = await _categoryService.DeleteAsync(id, deleteCategoryDto);
 

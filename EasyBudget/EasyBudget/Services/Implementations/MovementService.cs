@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using EasyBudget.Data.Dto.MovementDto;
-using EasyBudget.Data.Models;
+﻿using EasyBudget.Data.Dto.MovementDto;
 using EasyBudget.Errors;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.IServices;
@@ -12,33 +10,27 @@ namespace EasyBudget.Services.Implementations
     {
         private readonly IMovementRepository _movementRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
 
-        public MovementService(IMovementRepository movementRepository, ICategoryRepository categoryRepository,IMapper mapper)
+        public MovementService(IMovementRepository movementRepository, ICategoryRepository categoryRepository)
         {
             _movementRepository = movementRepository;
-            _mapper = mapper;
             _categoryRepository = categoryRepository;
         }
 
         public async Task<Result<IEnumerable<ReadMovementDto>>> GetAllAsync()
-            => Result.Ok(_mapper.Map<IEnumerable<ReadMovementDto>>(await _movementRepository.FindAllAsync()));
+            => Result.Ok(await _movementRepository.FindAllAsync());
 
-        public async Task<Result<ReadMovementDto>> GetByIdAsync(long id)
+        public async Task<Result<ReadMovementDto>> GetByIdAsync(int id)
         {
             if (id <= 0)
-            {
                 return Result.Fail(new IdLessThanZeroError());
-            }
 
             var movement = await _movementRepository.FindByIdAsync(id);
 
             if (movement == null)
-            {
                 return Result.Fail(new MovementNotFoundError());
-            }
 
-            return Result.Ok(_mapper.Map<ReadMovementDto>(movement));
+            return Result.Ok(movement);
         }
 
         public async Task<Result<ReadBalanceDto>> GetBalanceAsync()
@@ -49,59 +41,38 @@ namespace EasyBudget.Services.Implementations
             var category = await _categoryRepository.FindByIdAsync(createMovementDto.CategoryId);
 
             if (category == null)
-            {
                 return Result.Fail(new CategoryNotFoundError());
-            }
 
             if (!createMovementDto.Type.Equals(category.Type))
-            {
                 return Result.Fail(new InvalidCategoryError());
-            }
 
-            var movement = _mapper.Map<Movement>(createMovementDto);
-            movement.Created = DateTime.Now;
-            movement.Updated = DateTime.Now;
+            var createdMovement = await _movementRepository.InsertAsync(createMovementDto);
 
-            var createdMovement = await _movementRepository.InsertAsync(movement);
-
-            return Result.Ok(_mapper.Map<ReadMovementDto>(createdMovement));
+            return Result.Ok(createdMovement);
         }
 
         public async Task<Result> UpdateAsync(UpdateMovementDto updatedMovementDto)
         {
-            var movement = await _movementRepository.FindByIdAsync(updatedMovementDto.Id);
-
-            if (movement == null)
-            {
+            if (!await _movementRepository.ExistsByIdAsync(updatedMovementDto.Id))
                 return Result.Fail(new MovementNotFoundError());
-            }
 
             var category = await _categoryRepository.FindByIdAsync(updatedMovementDto.CategoryId);
 
             if (category == null)
-            {
                 return Result.Fail(new CategoryNotFoundError());
-            }
 
             if (!updatedMovementDto.Type.Equals(category.Type))
-            {
                 return Result.Fail(new InvalidCategoryError());
-            }
 
-            _mapper.Map(updatedMovementDto, movement);
-            movement.Updated = DateTime.Now;
-
-            await _movementRepository.UpdateAsync(movement);
+            await _movementRepository.UpdateAsync(updatedMovementDto);
 
             return Result.Ok();
         }
 
-        public async Task<Result> DeleteAsync(long id)
+        public async Task<Result> DeleteAsync(int id)
         {
             if (id <= 0)
-            {
                 return Result.Fail(new IdLessThanZeroError());
-            }
 
             await _movementRepository.DeleteAsync(id);
 

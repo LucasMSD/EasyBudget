@@ -2,6 +2,6 @@
 {
     public class ReplaceCategoryDto
     {
-        public long ReplaceCategoryId { get; set; }
+        public int ReplaceCategoryId { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using EasyBudget.Data.Dto.CategoryDto;
-using EasyBudget.Data.Dto.MovementDto;
+﻿using EasyBudget.Data.Dto.MovementDto;
 using EasyBudget.Errors;
 using EasyBudget.Services.IServices;
 using FluentResults;
@@ -22,7 +21,7 @@ namespace EasyBudget.Controllers
         /// Gets all movements in the system
         /// </summary>
         /// <response code="200">Returns all movements in the system</response>
-        [ProducesResponseType(typeof(List<ReadMovementDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ReadMovementDto>), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -39,7 +38,7 @@ namespace EasyBudget.Controllers
         /// <response code="404">Movement not found</response>
         [ProducesResponseType(typeof(ReadMovementDto), StatusCodes.Status200OK)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReadMovementDto>> Get([FromRoute] long id)
+        public async Task<ActionResult<ReadMovementDto>> Get([FromRoute] int id)
         {
             var result = await _movementService.GetByIdAsync(id);
 
@@ -118,7 +117,7 @@ namespace EasyBudget.Controllers
         /// <response code="404">Movement not found</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] long id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _movementService.DeleteAsync(id);
 
