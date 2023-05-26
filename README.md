@@ -2,10 +2,6 @@
 
 O EasyBudget Api é uma api em Asp.net Core para realizar a gestão financeira pessoal, dando a possibilidade de cadastar, ler, atualizar e deletar seus movimentos financeiros.
 
-# Como executar o projeto e criar o banco de dados?
-
-O projeto utiliza Entity Framework Core para criar os arquivos de Migration do banco de dados SQL. Para saber como executar o migration segue a [documentação oficial da Microsoft](https://learn.microsoft.com/pt-br/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli).
-
 # Funcionalidades
 
 # Lançamentos
