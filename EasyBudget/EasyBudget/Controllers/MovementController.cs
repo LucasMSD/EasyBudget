@@ -1,5 +1,5 @@
 ﻿using EasyBudget.Data.Dto.MovementDto;
-using EasyBudget.Errors;
+using EasyBudget.Errors.IErros;
 using EasyBudget.Services.IServices;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;

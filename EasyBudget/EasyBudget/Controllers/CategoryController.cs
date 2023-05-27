@@ -1,5 +1,5 @@
 ﻿using EasyBudget.Data.Dto.CategoryDto;
-using EasyBudget.Errors;
+using EasyBudget.Errors.IErros;
 using EasyBudget.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 

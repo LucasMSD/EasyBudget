@@ -1,4 +1,5 @@
-﻿using FluentResults;
+﻿using EasyBudget.Errors.IErros;
+using FluentResults;
 
 namespace EasyBudget.Errors
 {

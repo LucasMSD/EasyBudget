@@ -1,7 +1,6 @@
-﻿using EasyBudget.Data.Dto.CategoryDto;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace EasyBudget.Data.Dto.Validators.Category
+namespace EasyBudget.Data.Dto.CategoryDto.Validators
 {
     public class UpdateCategoryDtoValidator : AbstractValidator<UpdateCategoryDto>
     {

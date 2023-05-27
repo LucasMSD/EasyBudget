@@ -5,10 +5,13 @@ using EasyBudget.Services.Implementations;
 using EasyBudget.Services.IServices;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Text;
 
 namespace EasyBudget
 {
@@ -25,8 +28,12 @@ namespace EasyBudget
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IMovementRepository, MovementRepository>();
             builder.Services.AddScoped<IMovementService, MovementService>();
+            builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
+            builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -47,6 +54,26 @@ namespace EasyBudget
 
             builder.Services.AddSwaggerExamplesFromAssemblyOf<IAssemblyMarker>();
 
+
+            var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("AppSettings:SecretKey"));
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -58,6 +85,7 @@ namespace EasyBudget
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
