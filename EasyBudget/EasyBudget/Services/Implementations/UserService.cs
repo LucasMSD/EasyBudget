@@ -26,7 +26,7 @@ namespace EasyBudget.Services.Implementations
                 return Result.Fail(new InvalidCredentialsError());
             }
 
-            return Result.Ok(new TokenLoginDto { Token = _tokenService.GenerateToken(user.Id, user.FirstName, user.Email) });
+            return Result.Ok(new TokenLoginDto { AccessToken = _tokenService.GenerateAccessToken(user.Id, user.FirstName, user.Email) });
         }
 
         public async Task<Result<ReadUserSignupDto>> Signup(UserSignupDto userSignupDto)

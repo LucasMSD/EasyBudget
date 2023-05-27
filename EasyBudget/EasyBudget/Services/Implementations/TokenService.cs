@@ -18,7 +18,7 @@ namespace EasyBudget.Services.Implementations
             _appSettings = appSettings.Value;
         }
 
-        public string GenerateToken(int userId, string userfirstName, string userEmail)
+        public string GenerateAccessToken(int userId, string userfirstName, string userEmail)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey);
