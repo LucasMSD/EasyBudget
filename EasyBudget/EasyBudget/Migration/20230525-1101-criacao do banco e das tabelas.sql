@@ -9,8 +9,8 @@ CREATE TABLE Category
     id INT IDENTITY,
     name NVARCHAR(50) NOT NULL,
     type tinyint NOT NULL CHECK (type = 1 OR type = 2),
-    created datetime2 NOT NULL DEFAULT GETDATE(),
-    updated datetime2,
+    created datetime2(0) NOT NULL DEFAULT GETDATE(),
+    updated datetime2(0),
     CONSTRAINT Pk_Category_id PRIMARY KEY (id)
 );
 GO
@@ -24,8 +24,8 @@ CREATE TABLE Movement
     date DATE NOT NULL,
     category_id INT NOT NULL,
     description NVARCHAR(200),
-    created datetime2 NOT NULL DEFAULT GETDATE(),
-    updated datetime2
+    created datetime2(0) NOT NULL DEFAULT GETDATE(),
+    updated datetime2(0)
     CONSTRAINT Pk_Movement_id PRIMARY KEY (id),
     CONSTRAINT Fk_Movement_Category_id FOREIGN KEY (category_id) REFERENCES Category (id)
 );
