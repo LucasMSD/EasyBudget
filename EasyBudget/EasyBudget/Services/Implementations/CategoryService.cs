@@ -17,15 +17,15 @@ namespace EasyBudget.Services.Implementations
             _movementRepository = movementRepository;
         }
 
-        public async Task<Result<IEnumerable<ReadCategoryDto>>> GetAllAsync()
-            => Result.Ok(await _categoryRepository.FindAllAsync());
+        public async Task<Result<IEnumerable<ReadCategoryDto>>> GetAllAsync(int userId)
+            => Result.Ok(await _categoryRepository.FindAllAsync(userId));
 
-        public async Task<Result<ReadCategoryDto>> GetByIdAsync(int id)
+        public async Task<Result<ReadCategoryDto>> GetByIdAsync(int id, int userId)
         {
             if (id <= 0)
                 return Result.Fail(new IdLessThanZeroError());
 
-            var category = await _categoryRepository.FindByIdAsync(id);
+            var category = await _categoryRepository.FindByIdAsync(id, userId);
 
             if (category == null)
                 return Result.Fail(new CategoryNotFoundError());
@@ -35,7 +35,7 @@ namespace EasyBudget.Services.Implementations
 
         public async Task<Result<ReadCategoryDto>> CreateAsync(CreateCategoryDto createCategoryDto)
         {
-            if (await _categoryRepository.ExistsByNameAndTypeAsync(createCategoryDto.Name, createCategoryDto.Type))
+            if (await _categoryRepository.ExistsByNameAndTypeAsync(createCategoryDto.Name, createCategoryDto.Type, createCategoryDto.UserId))
                 return Result.Fail(new CategoryAlreadyExistsError());
 
             return Result.Ok(await _categoryRepository.InsertAsync(createCategoryDto));
@@ -43,10 +43,10 @@ namespace EasyBudget.Services.Implementations
 
         public async Task<Result> UpdateAsync(UpdateCategoryDto updateCategoryDto)
         {
-            if (!await _categoryRepository.ExistsByIdAsync(updateCategoryDto.Id))
+            if (!await _categoryRepository.ExistsByIdAsync(updateCategoryDto.Id, updateCategoryDto.UserId))
                 return Result.Fail(new CategoryNotFoundError());
 
-            if (await _categoryRepository.ExistsByNameAndTypeAsync(updateCategoryDto.Name, updateCategoryDto.Type))
+            if (await _categoryRepository.ExistsByNameAndTypeAsync(updateCategoryDto.Name, updateCategoryDto.Type, updateCategoryDto.UserId))
                 return Result.Fail(new CategoryAlreadyExistsError());
 
             await _categoryRepository.UpdateAsync(updateCategoryDto);
@@ -54,16 +54,16 @@ namespace EasyBudget.Services.Implementations
             return Result.Ok();
         }
 
-        public async Task<Result> DeleteAsync(int deleteCategoryid, ReplaceCategoryDto deleteCategoryDto)
+        public async Task<Result> DeleteAsync(int deleteCategoryid, ReplaceCategoryDto deleteCategoryDto, int userId)
         {
-            if (!await _categoryRepository.ExistsByIdAsync(deleteCategoryid))
+            if (!await _categoryRepository.ExistsByIdAsync(deleteCategoryid, userId))
                 return Result.Fail(new CategoryNotFoundError());
 
-            if (!await _categoryRepository.ExistsByIdAsync(deleteCategoryDto.ReplaceCategoryId))
+            if (!await _categoryRepository.ExistsByIdAsync(deleteCategoryDto.ReplaceCategoryId, userId))
                 return Result.Fail(new CategoryNotFoundError().WithMetadata("Field", nameof(deleteCategoryDto.ReplaceCategoryId)));
 
-            await _movementRepository.ReplaceCategory(deleteCategoryid, deleteCategoryDto.ReplaceCategoryId);
-            await _categoryRepository.DeleteAsync(deleteCategoryid);
+            await _movementRepository.ReplaceCategory(deleteCategoryid, deleteCategoryDto.ReplaceCategoryId, userId);
+            await _categoryRepository.DeleteAsync(deleteCategoryid, userId);
 
             return Result.Ok();
         }

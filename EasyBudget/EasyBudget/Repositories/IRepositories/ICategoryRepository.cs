@@ -5,11 +5,11 @@ namespace EasyBudget.Repositories.IRepositories
 {
     public interface ICategoryRepository
     {
-        Task<bool> ExistsByIdAsync(int id);
-        Task<bool> ExistsByNameAndTypeAsync(string name, FinancialType type);
-        Task DeleteAsync(int id);
-        Task<IEnumerable<ReadCategoryDto>> FindAllAsync();
-        Task<ReadCategoryDto?> FindByIdAsync(int id);
+        Task<bool> ExistsByIdAsync(int id, int userId);
+        Task<bool> ExistsByNameAndTypeAsync(string name, FinancialType type, int userId);
+        Task DeleteAsync(int id, int userId);
+        Task<IEnumerable<ReadCategoryDto>> FindAllAsync(int userId);
+        Task<ReadCategoryDto?> FindByIdAsync(int id, int userId);
         Task<ReadCategoryDto> InsertAsync(CreateCategoryDto category);
         Task UpdateAsync(UpdateCategoryDto category);
     }

@@ -1,12 +1,15 @@
 ﻿using EasyBudget.Data.Dto.CategoryDto;
 using EasyBudget.Errors.IErros;
 using EasyBudget.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EasyBudget.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -24,7 +27,8 @@ namespace EasyBudget.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _categoryService.GetAllAsync();
+            int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _categoryService.GetAllAsync(userId);
 
             return Ok(result.Value);
         }
@@ -39,7 +43,8 @@ namespace EasyBudget.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            var result = await _categoryService.GetByIdAsync(id);
+            int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _categoryService.GetByIdAsync(id, userId);
 
             if (result.HasError<IBadRequestError>())
             {
@@ -64,6 +69,7 @@ namespace EasyBudget.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateCategoryDto createCategoryDto)
         {
+            createCategoryDto.UserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var result = await _categoryService.CreateAsync(createCategoryDto);
 
             if (result.HasError<IBadRequestError>())
@@ -85,6 +91,7 @@ namespace EasyBudget.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UpdateCategoryDto updateCategoryDto)
         {
+            updateCategoryDto.UserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var result = await _categoryService.UpdateAsync(updateCategoryDto);
 
             if (result.HasError<IBadRequestError>())
@@ -110,7 +117,8 @@ namespace EasyBudget.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id, [FromBody] ReplaceCategoryDto deleteCategoryDto)
         {
-            var result = await _categoryService.DeleteAsync(id, deleteCategoryDto);
+            int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _categoryService.DeleteAsync(id, deleteCategoryDto, userId);
 
             if (result.HasError<IBadRequestError>())
             {

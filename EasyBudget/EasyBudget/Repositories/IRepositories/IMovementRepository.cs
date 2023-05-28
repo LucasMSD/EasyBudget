@@ -4,15 +4,15 @@ namespace EasyBudget.Repositories.IRepositories
 {
     public interface IMovementRepository
     {
-        Task DeleteAsync(int id);
-        Task<IEnumerable<ReadMovementDto>> FindAllAsync();
-        Task<IEnumerable<ReadMovementDto>> FindAllByCategoryAsync(int categoryId);
-        Task<ReadMovementDto?> FindByIdAsync(int id);
+        Task DeleteAsync(int id, int userId);
+        Task<IEnumerable<ReadMovementDto>> FindAllAsync(int userId);
+        Task<IEnumerable<ReadMovementDto>> FindAllByCategoryAsync(int categoryId, int userId);
+        Task<ReadMovementDto?> FindByIdAsync(int id, int userId);
         Task<ReadMovementDto> InsertAsync(CreateMovementDto movement);
-        Task<decimal> SumAllMovementsAmount();
+        Task<decimal> SumAllMovementsAmount(int userId);
         Task UpdateAsync(UpdateMovementDto movement);
         Task UpdateRangeAsync(IEnumerable<UpdateMovementDto> movements);
-        Task ReplaceCategory(int oldCategoryId, int newCategoryId);
-        Task<bool> ExistsByIdAsync(int id);
+        Task ReplaceCategory(int oldCategoryId, int newCategoryId, int userId);
+        Task<bool> ExistsByIdAsync(int id, int userId);
     }
 }

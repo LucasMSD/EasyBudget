@@ -17,15 +17,15 @@ namespace EasyBudget.Services.Implementations
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<IEnumerable<ReadMovementDto>>> GetAllAsync()
-            => Result.Ok(await _movementRepository.FindAllAsync());
+        public async Task<Result<IEnumerable<ReadMovementDto>>> GetAllAsync(int userId)
+            => Result.Ok(await _movementRepository.FindAllAsync(userId));
 
-        public async Task<Result<ReadMovementDto>> GetByIdAsync(int id)
+        public async Task<Result<ReadMovementDto>> GetByIdAsync(int id, int userId)
         {
             if (id <= 0)
                 return Result.Fail(new IdLessThanZeroError());
 
-            var movement = await _movementRepository.FindByIdAsync(id);
+            var movement = await _movementRepository.FindByIdAsync(id, userId);
 
             if (movement == null)
                 return Result.Fail(new MovementNotFoundError());
@@ -33,12 +33,12 @@ namespace EasyBudget.Services.Implementations
             return Result.Ok(movement);
         }
 
-        public async Task<Result<ReadBalanceDto>> GetBalanceAsync()
-            => Result.Ok(new ReadBalanceDto() { Balance = await _movementRepository.SumAllMovementsAmount() });
+        public async Task<Result<ReadBalanceDto>> GetBalanceAsync(int userId)
+            => Result.Ok(new ReadBalanceDto() { Balance = await _movementRepository.SumAllMovementsAmount(userId) });
 
         public async Task<Result<ReadMovementDto>> CreateAsync(CreateMovementDto createMovementDto)
         {
-            var category = await _categoryRepository.FindByIdAsync(createMovementDto.CategoryId);
+            var category = await _categoryRepository.FindByIdAsync(createMovementDto.CategoryId, createMovementDto.UserId);
 
             if (category == null)
                 return Result.Fail(new CategoryNotFoundError());
@@ -53,10 +53,10 @@ namespace EasyBudget.Services.Implementations
 
         public async Task<Result> UpdateAsync(UpdateMovementDto updatedMovementDto)
         {
-            if (!await _movementRepository.ExistsByIdAsync(updatedMovementDto.Id))
+            if (!await _movementRepository.ExistsByIdAsync(updatedMovementDto.Id, updatedMovementDto.UserId))
                 return Result.Fail(new MovementNotFoundError());
 
-            var category = await _categoryRepository.FindByIdAsync(updatedMovementDto.CategoryId);
+            var category = await _categoryRepository.FindByIdAsync(updatedMovementDto.CategoryId, updatedMovementDto.UserId);
 
             if (category == null)
                 return Result.Fail(new CategoryNotFoundError());
@@ -69,12 +69,12 @@ namespace EasyBudget.Services.Implementations
             return Result.Ok();
         }
 
-        public async Task<Result> DeleteAsync(int id)
+        public async Task<Result> DeleteAsync(int id, int userId)
         {
             if (id <= 0)
                 return Result.Fail(new IdLessThanZeroError());
 
-            await _movementRepository.DeleteAsync(id);
+            await _movementRepository.DeleteAsync(id, userId);
 
             return Result.Ok();
         }

@@ -1,13 +1,17 @@
 ﻿using EasyBudget.Data.Dto.MovementDto;
+using EasyBudget.Data.Models;
 using EasyBudget.Errors.IErros;
 using EasyBudget.Services.IServices;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EasyBudget.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class MovementController : ControllerBase
     {
         private readonly IMovementService _movementService;
@@ -25,7 +29,8 @@ namespace EasyBudget.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _movementService.GetAllAsync();
+            int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _movementService.GetAllAsync(userId);
 
             return Ok(result.Value);
         }
@@ -40,7 +45,8 @@ namespace EasyBudget.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ReadMovementDto>> Get([FromRoute] int id)
         {
-            var result = await _movementService.GetByIdAsync(id);
+            int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _movementService.GetByIdAsync(id, userId);
 
             if (result.HasError<IBadRequestError>())
             {
@@ -62,7 +68,7 @@ namespace EasyBudget.Controllers
         [ProducesResponseType(typeof(ReadBalanceDto), StatusCodes.Status200OK)]
         [HttpGet("balance")]
         public async Task<ActionResult<ReadBalanceDto>> GetBalance()
-            => Ok((await _movementService.GetBalanceAsync()).Value);
+            => Ok((await _movementService.GetBalanceAsync(Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)))).Value);
 
 
         /// <summary>
@@ -74,6 +80,7 @@ namespace EasyBudget.Controllers
         [HttpPost]
         public async Task<ActionResult<ReadMovementDto>> Post([FromBody] CreateMovementDto createMovementDto)
         {
+            createMovementDto.UserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var result = await _movementService.CreateAsync(createMovementDto);
 
             if (result.HasError<IError>())
@@ -94,6 +101,7 @@ namespace EasyBudget.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UpdateMovementDto updateMovementDto)
         {
+            updateMovementDto.UserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var result = await _movementService.UpdateAsync(updateMovementDto);
 
             if (result.HasError<IBadRequestError>())
@@ -119,7 +127,8 @@ namespace EasyBudget.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await _movementService.DeleteAsync(id);
+            int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _movementService.DeleteAsync(id, userId);
 
             if (result.HasError<IBadRequestError>())
             {

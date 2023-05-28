@@ -3,7 +3,6 @@ using EasyBudget.Data.Dto.UserDto;
 using EasyBudget.Data.Models;
 using EasyBudget.Repositories.IRepositories;
 using System.Data.SqlClient;
-using System.Runtime.InteropServices;
 
 namespace EasyBudget.Repositories.Implementations
 {
@@ -38,8 +37,8 @@ SELECT
             string query = @"
 SELECT
     id as Id,
-    firstName as FirstName,
-    lastName as LastName,
+    first_name as FirstName,
+    last_name as LastName,
     email as Email,
     birth as Birth
 FROM [User]
@@ -54,11 +53,11 @@ AND password = @Password
         {
             string query = @"
 INSERT INTO [User]
-(firstName, lastName, email, password, birth) 
+(first_name, last_name, email, password, birth) 
 OUTPUT
     inserted.id as Id,
-    inserted.firstName as FirstName,
-    inserted.lastName as LastName,
+    inserted.first_name as FirstName,
+    inserted.last_name as LastName,
     inserted.email as Email,
     inserted.birth as Birth
 VALUES
