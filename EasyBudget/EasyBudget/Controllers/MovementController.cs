@@ -1,4 +1,5 @@
-﻿using EasyBudget.Data.Dto.MovementDto;
+﻿using EasyBudget.Data.Dto;
+using EasyBudget.Data.Dto.MovementDto;
 using EasyBudget.Data.Models;
 using EasyBudget.Errors.IErros;
 using EasyBudget.Services.IServices;
@@ -27,10 +28,10 @@ namespace EasyBudget.Controllers
         /// <response code="200">Returns all movements in the system</response>
         [ProducesResponseType(typeof(IEnumerable<ReadMovementDto>), StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] QueryFiltersDto queryFilters)
         {
             int userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var result = await _movementService.GetAllAsync(userId);
+            var result = await _movementService.GetAllAsync(userId, queryFilters);
 
             return Ok(result.Value);
         }

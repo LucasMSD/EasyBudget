@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EasyBudget.Data.Dto;
 using EasyBudget.Data.Dto.CategoryDto;
 using EasyBudget.Data.Dto.MovementDto;
 using EasyBudget.Enums;
@@ -27,7 +28,7 @@ AND user_id = @UserId
             await _conn.ExecuteAsync(command, new { Id = id, UserId = userId });
         }
 
-        public async Task<IEnumerable<ReadMovementDto>> FindAllAsync(int userId)
+        public async Task<IEnumerable<ReadMovementDto>> FindAllAsync(int userId, QueryFiltersDto queryFiltersDto)
         {
             string query = @$"
 SELECT
@@ -53,13 +54,42 @@ SELECT
 FROM Movement as [m]
     JOIN Category as [c]
         on [m].category_id = [c].id
-WHERE [m].user_id = @UserId;";
+WHERE [m].user_id = @UserId
+";
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("UserId", userId);
+
+            if (queryFiltersDto.Title != null)
+            {
+                query += "AND [m].title like concat('%', @Title, '%')\n";
+                parameters.Add("Title", queryFiltersDto.Title);
+            }
+
+            if (queryFiltersDto.Date != null)
+            {
+                query += "AND [m].date = @Date\n";
+                parameters.Add("Date", queryFiltersDto.Date.Value.Date);
+            }
+
+            if (queryFiltersDto.Type != null)
+            {
+                query += "AND [m].type = @Type\n";
+                parameters.Add("Type", (int)queryFiltersDto.Type.Value);
+            }
+
+            if (queryFiltersDto.CategoryId != null)
+            {
+                query += "AND [m].category_id = @CategoryId";
+                parameters.Add("CategoryId", queryFiltersDto.CategoryId);
+            }
 
             return await _conn.QueryAsync<ReadMovementDto, ReadCategoryDto, ReadMovementDto>(query, (movement, category) =>
             {
                 movement.Category = category;
                 return movement;
-            }, new { UserId = userId });
+            }, parameters);
         }
 
         public async Task<IEnumerable<ReadMovementDto>> FindAllByCategoryAsync(int categoryId, int userId)
