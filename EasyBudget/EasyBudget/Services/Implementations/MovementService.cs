@@ -1,4 +1,5 @@
-﻿using EasyBudget.Data.Dto.MovementDto;
+﻿using EasyBudget.Data.Dto;
+using EasyBudget.Data.Dto.MovementDto;
 using EasyBudget.Errors;
 using EasyBudget.Repositories.IRepositories;
 using EasyBudget.Services.IServices;
@@ -17,8 +18,8 @@ namespace EasyBudget.Services.Implementations
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<IEnumerable<ReadMovementDto>>> GetAllAsync(int userId)
-            => Result.Ok(await _movementRepository.FindAllAsync(userId));
+        public async Task<Result<IEnumerable<ReadMovementDto>>> GetAllAsync(int userId, QueryFiltersDto queryFiltersDto)
+            => Result.Ok(await _movementRepository.FindAllAsync(userId, queryFiltersDto));
 
         public async Task<Result<ReadMovementDto>> GetByIdAsync(int id, int userId)
         {
