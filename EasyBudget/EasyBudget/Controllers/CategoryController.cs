@@ -20,9 +20,9 @@ namespace EasyBudget.Controllers
         }
 
         /// <summary>
-        /// Gets all categories in the system
+        /// Gets all categories of the user
         /// </summary>
-        /// <response code="200">Returns all categories in the system</response>
+        /// <response code="200">Returns all categories of the user</response>
         [ProducesResponseType(typeof(IEnumerable<ReadCategoryDto>), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<IActionResult> Get()
