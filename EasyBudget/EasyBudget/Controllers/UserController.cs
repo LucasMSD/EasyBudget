@@ -1,4 +1,5 @@
-﻿using EasyBudget.Data.Dto.UserDto;
+﻿using EasyBudget.Data.Dto.MovementDto;
+using EasyBudget.Data.Dto.UserDto;
 using EasyBudget.Errors.IErros;
 using EasyBudget.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,14 @@ namespace EasyBudget.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Sign up a new user
+        /// </summary>
+        /// <param name="userSignupDto"></param>
+        /// <response code="201">The user was signed up successfully</response>
+        /// <response code="400">Unable to sign up the user due to validaton error</response>
         [HttpPost("Signup")]
+        [ProducesResponseType(typeof(ReadUserSignupDto), StatusCodes.Status201Created)]
         [AllowAnonymous]
         public async Task<IActionResult> Signup([FromBody] UserSignupDto userSignupDto)
         {
@@ -31,7 +39,13 @@ namespace EasyBudget.Controllers
             return StatusCode(201, result.Value);
         }
 
+        /// <summary>
+        /// Sign in a user
+        /// </summary>
+        /// <param name="userSiginDto"></param>
+        /// <response code="400">Unable to sign in the user due to validaton error</response>
         [HttpPost("Signin")]
+        [ProducesResponseType(typeof(TokenLoginDto), StatusCodes.Status200OK)]
         [AllowAnonymous]
         public async Task<IActionResult> Signin([FromBody] UserSigninDto userSiginDto)
         {
